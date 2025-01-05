@@ -49,7 +49,7 @@ int main()
                     }
 
                     printf("Wybierz liczbe wierszy: ");
-                    scanf("%d", &liczba_kolumn);
+                    scanf("%d", &liczba_wierszy);
                     if(liczba_wierszy < 0){
                         printf("Nieprawidlowa liczba wierszy: podana wartosc powinna byc liczba calkowita, wieksza od zera\n");
                         return 3;
@@ -61,7 +61,7 @@ int main()
                         printf("Nieprawidlowa liczba min: podana wartosc powinna byc liczba calkowita, wieksza od zera\n");
                         return 4;
                     }
-                    if(liczba_min >= liczba_kolumn * liczba_wierszy){               //Tego ifa trzeba poprawic, z jakiego powodu nie akceptuje niektorych teoretycznie poprawnych wymiarow/liczb min???
+                    if(liczba_min >= liczba_kolumn * liczba_wierszy){
                         printf("Nieprawidlowa liczba min: podana wartosc powinna byc liczba calkowita, wieksza od zera, mniejsza od liczby pol planszy\n");
                         return 5;
                     }
