@@ -2,10 +2,31 @@
 #include<stdlib.h>
 #include<math.h>
 
+// funkcja wypelniajaca plansze znakami niezaznaczenia
+void wypelnienie_planszy(int liczba_wierszy, int liczba_kolumn, char **plansza) {
+    for (int i = 0; i<liczba_wierszy; i++) {
+        for (int j = 0; j<liczba_kolumn; j++) {
+            plansza[i][j] = '#';
+        }
+    }
+}
+
+// funkcja wypisujaca plansze
+void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
+    for(int i = 0; i<liczba_wierszy; i++) {
+        for(int j = 0; j<liczba_kolumn; j++) {
+            printf("[%c]", plansza[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 int main()
 {
     int trudnosc;               //Poziom trudnosci gry
     int liczba_wierszy, liczba_kolumn, liczba_min, mnoznik_punktow;
+
+    printf("Saper");             //Placeholder tu cos ladniejszego dac
 
     printf("Wybierz poziom trudnosci:\n");
     printf("Latwy :) - 1\t Sredni :| - 2\t Trudny >:( - 3\t Wlasny - 4\n");
@@ -74,8 +95,20 @@ int main()
             default:
                     printf("Nieprawidlowo wybrano poziom trudnosci\n");
                     return 1;
-
-
-                    
     }
+
+    // alokacja pamieci dla tablicy przechowujacej plansze pod spodem
+    char **plansza_pod = (char **)malloc(liczba_wierszy * sizeof(char *));
+    for (int i = 0; i<liczba_wierszy; i++) {
+        plansza_pod[i] = (char *)malloc(liczba_kolumn * sizeof(char)); 
+    }
+
+    // alokacja pamieci dla tablicy przechowujacej plansze wyswietlona uzytkownikowi
+    char **plansza_nad = (char **)malloc(liczba_wierszy * sizeof(char *));
+    for (int i = 0; i<liczba_wierszy; i++) {
+        plansza_nad[i] = (char *)malloc(liczba_kolumn * sizeof(char)); 
+    }
+
+    wypelnienie_planszy(liczba_wierszy, liczba_kolumn, plansza_nad);
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
 }
