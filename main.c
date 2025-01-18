@@ -2,18 +2,50 @@
 #include<stdlib.h>
 #include<math.h>
 
+#define POLE_NIEODKRYTE '#'
+#define POLE_ODKRYTE '.'
+#define FLAGA 'F'
+
+// funkcja aktualizujaca na jego podstawie plansze
+void aktualizacja_planszy (char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
+    switch (dzialanie_na_polu) {
+    case 'r':
+        plansza_pod[x][y] = POLE_ODKRYTE;
+        plansza_nad[x][y] = plansza_pod[x][y];
+        break;
+    
+    case 'f':
+        plansza_pod[x][y] = FLAGA;
+        plansza_nad[x][y] = plansza_pod[x][y];
+        break;
+
+    default:
+        printf("\n Podano niepoprawne wejscie\n");
+        break;
+    }
+
+}
+
+
 // funkcja wypelniajaca plansze znakami niezaznaczenia
 void wypelnienie_planszy(int liczba_wierszy, int liczba_kolumn, char **plansza) {
     for (int i = 0; i<liczba_wierszy; i++) {
         for (int j = 0; j<liczba_kolumn; j++) {
-            plansza[i][j] = '#';
+            plansza[i][j] = POLE_NIEODKRYTE;
         }
     }
 }
 
 // funkcja wypisujaca plansze
 void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
+    printf("\n   ");
+    for(int i = 1; i<=liczba_kolumn; i++) {
+        printf("[%d]", i);
+    }
+    printf("\n");
+
     for(int i = 0; i<liczba_wierszy; i++) {
+        printf("[%d]", i+1);
         for(int j = 0; j<liczba_kolumn; j++) {
             printf("[%c]", plansza[i][j]);
         }
@@ -25,6 +57,9 @@ int main()
 {
     int trudnosc;               //Poziom trudnosci gry
     int liczba_wierszy, liczba_kolumn, liczba_min, mnoznik_punktow;
+    int stan_gry = 0;           // -1 - przegrana, 0 - trwa, 1 - wygrana
+    int x, y;                   // Wspolrzedne pola wpisywane przez uzytkownika
+    char dzialanie_na_polu;     // Wybor miedzy odslanieciem pola a wstawieniu flagi (r/f)
 
     printf("Saper");             //Placeholder tu cos ladniejszego dac
 
@@ -110,5 +145,17 @@ int main()
     }
 
     wypelnienie_planszy(liczba_wierszy, liczba_kolumn, plansza_nad);
-    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+
+    while(stan_gry == 0) {
+        wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+
+        printf("\n Podaj tryb zaznaczania pola i wspolrzedne: ");
+        scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
+        printf("\n");
+
+        aktualizuj_plansze(plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
+
+        wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+        stan_gry = 1;
+    }
 }
