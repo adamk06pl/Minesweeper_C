@@ -12,13 +12,11 @@
 void aktualizuj_plansze (char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
     switch (dzialanie_na_polu) {
     case 'r':
-        plansza_pod[x][y] = POLE_ODKRYTE;
-        plansza_nad[x][y] = plansza_pod[x][y];
+        plansza_nad[x][y] = POLE_ODKRYTE;
         break;
     
     case 'f':
-        plansza_pod[x][y] = FLAGA;
-        plansza_nad[x][y] = plansza_pod[x][y];
+        plansza_nad[x][y] = FLAGA;
         break;
 
     default:
@@ -55,6 +53,102 @@ void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
     }
 }
 
+// funkcja konwertujaca char na int
+char konwertuj_char_to_int(int licznik) {
+    char wynik = '!';
+
+    if(licznik == 0) {
+        wynik = '0';
+    }
+    if(licznik == 1) {
+        wynik = '1';
+    }
+    if(licznik == 2) {
+        wynik = '2';
+    }
+    if(licznik == 3) {
+        wynik = '3';
+    }
+    if(licznik == 4) {
+        wynik = '4';
+    }
+    if(licznik == 5) {
+        wynik = '5';
+    }
+    if(licznik == 6) {
+        wynik = '6';
+    }
+    if(licznik == 7) {
+        wynik = '7';
+    }
+    if(licznik == 8) {
+        wynik = '8';
+    }
+
+    return wynik;
+}
+
+// funkcja badajaca
+char badaj_punkt(int liczba_wierszy, int liczba_kolumn, char **plansza, int x, int y) {
+    int licznik = 0;
+    char wynik = '?';
+
+    if(x>=0 && x<liczba_kolumn && y>=0 && y<liczba_wierszy) {
+        //lewy gorny
+        if(x-1>=0 && y-1>=0) {
+            if(plansza[x-1][y-1] == MINA) {
+                licznik++;
+            }
+        }
+        //lewy
+        if(x-1>=0) {
+            if(plansza[x-1][y] == MINA) {
+                licznik++;
+            }
+        }
+        //lewy dolny
+        if(x-1>=0 && y+1<liczba_wierszy) {
+            if(plansza[x-1][y+1] == MINA) {
+                licznik++;
+            }
+        }
+        //dol
+        if(y+1<liczba_wierszy) {
+            if(plansza[x][y+1] == MINA) {
+                licznik++;
+            }
+        }
+        //prawy dolny
+        if(x+1<liczba_kolumn && y+1<liczba_wierszy) {
+            if(plansza[x+1][y+1] == MINA) {
+                licznik++;
+            }
+        }
+        //prawy
+        if(x+1<liczba_kolumn) {
+            if(plansza[x+1][y] == MINA) {
+                licznik++;
+            }
+        }
+        //prawy gorny
+        if(x+1<liczba_kolumn && y-1>=0) {
+            if(plansza[x+1][y-1] == MINA) {
+                licznik++;
+            }
+        }
+        //gora
+        if(y-1>=0) {
+            if(plansza[x][y-1] == MINA) {
+                licznik++;
+            }
+        }
+    }
+
+    wynik = konwertuj_char_to_int(licznik);
+
+    return wynik;
+}
+
 // funkcja wypelniajaca plansze_pod bombami
 void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod) {
     for(int i = 0; i<liczba_min; i++) {
@@ -65,6 +159,9 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
         for(int j = 0; j<liczba_kolumn; j++) {
             if(plansza_pod[i][j] == '\0') {
                 plansza_pod[i][j] = '0';
+            }
+            if(plansza_pod[i][j] != MINA) {
+                plansza_pod[i][j] = badaj_punkt(liczba_wierszy, liczba_kolumn, plansza_pod, i, j);
             }
         }
     }
