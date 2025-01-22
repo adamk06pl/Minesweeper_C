@@ -1,13 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include<time.h>
 
 #define POLE_NIEODKRYTE '#'
 #define POLE_ODKRYTE '.'
 #define FLAGA 'F'
+#define MINA '*'
 
 // funkcja aktualizujaca na jego podstawie plansze
-void aktualizacja_planszy (char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
+void aktualizuj_plansze (char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
     switch (dzialanie_na_polu) {
     case 'r':
         plansza_pod[x][y] = POLE_ODKRYTE;
@@ -53,8 +55,18 @@ void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
     }
 }
 
+// funkcja wypelniajaca plansze_pod bombami
+void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod) {
+    for(int i = 0; i<liczba_min; i++) {
+        plansza_pod[rand() % (liczba_wierszy + 1)][rand() % (liczba_kolumn + 1)] = MINA;
+    }
+
+}
+
 int main()
 {
+    srand(time(NULL));
+
     int trudnosc;               //Poziom trudnosci gry
     int liczba_wierszy, liczba_kolumn, liczba_min, mnoznik_punktow;
     int stan_gry = 0;           // -1 - przegrana, 0 - trwa, 1 - wygrana
@@ -145,6 +157,7 @@ int main()
     }
 
     wypelnienie_planszy(liczba_wierszy, liczba_kolumn, plansza_nad);
+    wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod);
 
     while(stan_gry == 0) {
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
@@ -158,4 +171,7 @@ int main()
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
         stan_gry = 1;
     }
+
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
+
 }
