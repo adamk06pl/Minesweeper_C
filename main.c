@@ -58,7 +58,15 @@ void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
 // funkcja wypelniajaca plansze_pod bombami
 void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod) {
     for(int i = 0; i<liczba_min; i++) {
-        plansza_pod[rand() % (liczba_wierszy + 1)][rand() % (liczba_kolumn + 1)] = MINA;
+        plansza_pod[rand() % (liczba_wierszy)][rand() % (liczba_kolumn)] = MINA;
+    }
+
+    for(int i = 0; i<liczba_wierszy; i++) {
+        for(int j = 0; j<liczba_kolumn; j++) {
+            if(plansza_pod[i][j] == '\0') {
+                plansza_pod[i][j] = '0';
+            }
+        }
     }
 
 }
