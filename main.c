@@ -296,7 +296,7 @@ void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_p
     switch (dzialanie_na_polu) {
     case 'r':
         //plansza_nad[x][y] = POLE_ODKRYTE;
-        if(plansza_nad[x][y] != POLE_ODKRYTE && plansza_nad[x][y] != FLAGA) {
+        if(plansza_nad[x][y] != POLE_ODKRYTE && plansza_nad[x][y] != FLAGA && plansza_nad[x][y] !='1' && plansza_nad[x][y] != '2' && plansza_nad[x][y] != '3' && plansza_nad[x][y] != '4' && plansza_nad[x][y] != '5' && plansza_nad[x][y] != '6' && plansza_nad[x][y] != '7' && plansza_nad[x][y] != '8') {
             odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod);
         }
         else {
