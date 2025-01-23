@@ -227,6 +227,84 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 
 }
 
+void poczatkowe_odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod) {
+    if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
+        plansza_nad[poczatkowy_y][poczatkowy_x] = plansza_pod[poczatkowy_y][poczatkowy_x];
+        //lewy gorny
+        if(poczatkowy_x-1>=0 && poczatkowy_y-1>=0) {
+            if(plansza_pod[poczatkowy_y-1][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x-1] != MINA) {
+                plansza_nad[poczatkowy_y-1][poczatkowy_x-1] = plansza_pod[poczatkowy_y-1][poczatkowy_x-1];
+            }
+            else if(plansza_pod[poczatkowy_y-1][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x-1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y-1, plansza_nad, plansza_pod);
+            }
+        }
+        //lewy
+        if(poczatkowy_x-1>=0) {
+            if(plansza_pod[poczatkowy_y][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y][poczatkowy_x-1] != MINA) {
+                plansza_nad[poczatkowy_y][poczatkowy_x-1] = plansza_pod[poczatkowy_y][poczatkowy_x-1];
+            }
+            else if(plansza_pod[poczatkowy_y][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y][poczatkowy_x-1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y, plansza_nad, plansza_pod);
+            }
+        }
+        //lewy dolny
+        if(poczatkowy_x-1>=0 && poczatkowy_y+1<liczba_wierszy) {
+            if(plansza_pod[poczatkowy_y+1][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x-1] != MINA) {
+                plansza_nad[poczatkowy_y+1][poczatkowy_x-1] = plansza_pod[poczatkowy_y+1][poczatkowy_x-1];
+            }
+            else if(plansza_pod[poczatkowy_y+1][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x-1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y+1, plansza_nad, plansza_pod);
+            }
+        }
+        //dol
+        if(poczatkowy_y+1<liczba_wierszy) {
+            if(plansza_pod[poczatkowy_y+1][poczatkowy_x] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x] != MINA) {
+                plansza_nad[poczatkowy_y+1][poczatkowy_x] = plansza_pod[poczatkowy_y+1][poczatkowy_x];
+            }
+            else if(plansza_pod[poczatkowy_y+1][poczatkowy_x] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y+1, plansza_nad, plansza_pod);
+            }
+        }
+        //prawy dolny
+        if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y+1<liczba_wierszy) {
+            if(plansza_pod[poczatkowy_y+1][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x+1] != MINA) {
+                plansza_nad[poczatkowy_y+1][poczatkowy_x+1] = plansza_pod[poczatkowy_y+1][poczatkowy_x+1];
+            }
+            else if(plansza_pod[poczatkowy_y+1][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x+1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y+1, plansza_nad, plansza_pod);
+            }
+        }
+        //prawy
+        if(poczatkowy_x+1<liczba_kolumn) {
+            if(plansza_pod[poczatkowy_y][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y][poczatkowy_x+1] != MINA) {
+                plansza_nad[poczatkowy_y][poczatkowy_x+1] = plansza_pod[poczatkowy_y][poczatkowy_x+1];
+            }
+            else if(plansza_pod[poczatkowy_y][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y][poczatkowy_x+1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y, plansza_nad, plansza_pod);
+            }
+        }
+        //prawy gorny
+        if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y-1>=0) {
+            if(plansza_pod[poczatkowy_y-1][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x+1] != MINA) {
+                plansza_nad[poczatkowy_y-1][poczatkowy_x+1] = plansza_pod[poczatkowy_y-1][poczatkowy_x+1];
+            }
+            else if(plansza_pod[poczatkowy_y-1][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x+1] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y-1, plansza_nad, plansza_pod);
+            }
+        }
+        //gora
+        if(poczatkowy_y-1>=0) {
+            if(plansza_pod[poczatkowy_y-1][poczatkowy_x] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x] != MINA) {
+                plansza_nad[poczatkowy_y-1][poczatkowy_x] = plansza_pod[poczatkowy_y-1][poczatkowy_x];
+            }
+            else if(plansza_pod[poczatkowy_y-1][poczatkowy_x] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x] == POLE_NIEODKRYTE) {
+                poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y-1, plansza_nad, plansza_pod);
+            }
+        }
+    }
+}
+
 int main()
 {
     srand(time(NULL));
@@ -322,14 +400,17 @@ int main()
 
     wypelnienie_planszy(liczba_wierszy, liczba_kolumn, plansza_nad);
     wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
-    printf("\n Rozpoczynamy grę, podaj tryb zaznaczania pola i wspolrzedne: ");
-    scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
+    printf("\n Rozpoczynamy grę, wspolrzedne poczatkowe: ");
+    scanf("%d %d", &x, &y);
     printf("\n");
 
     printf("Uytkownik podał x=%d, y=%d\n", x, y);
     wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod, x-1, y-1);
-    aktualizuj_plansze(plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
+    poczatkowe_odkrycie(liczba_wierszy, liczba_kolumn, x, y, plansza_nad, plansza_pod);
 
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+    printf("\n");
     wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
 
     while(stan_gry == 0) {
