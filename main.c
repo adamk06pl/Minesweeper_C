@@ -427,8 +427,12 @@ int main()
 
         aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
-        stan_gry = 1;
+        if(plansza_pod[y-1][x-1] == MINA) {
+            stan_gry = -1;
+        }
     }
+    
+
 
     // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
 
