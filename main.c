@@ -209,7 +209,7 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 }
 
 void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod) {
-    printf("Przekazne x, y do funkcjo odkrycie: x=%d, y=%d", poczatkowy_x, poczatkowy_y);
+    // DIAGNOSTYCZNE printf("Przekazne x, y do funkcjo odkrycie: x=%d, y=%d", poczatkowy_x, poczatkowy_y);
     if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
         plansza_nad[poczatkowy_y][poczatkowy_x] = plansza_pod[poczatkowy_y][poczatkowy_x];
 
@@ -296,7 +296,13 @@ void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_p
     switch (dzialanie_na_polu) {
     case 'r':
         //plansza_nad[x][y] = POLE_ODKRYTE;
-        odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod);
+        if(plansza_nad[x][y] != POLE_ODKRYTE && plansza_nad[x][y] != FLAGA) {
+            odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod);
+        }
+        else {
+            printf("\n W tym miejscu nie mozna odslonic pola !!!\n");
+        }
+
         break;
     
     case 'f':
