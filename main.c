@@ -292,7 +292,7 @@ void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int pocza
 }
 
 // funkcja aktualizujaca na jego podstawie plansze
-void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
+void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y, int licznik_flag, int liczba_min) {
     switch (dzialanie_na_polu) {
     case 'r':
         //plansza_nad[x][y] = POLE_ODKRYTE;
@@ -306,16 +306,22 @@ void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_p
         break;
     
     case 'f':
-        if(plansza_nad[x][y] == POLE_NIEODKRYTE) {
-            plansza_nad[x][y] = FLAGA;         
-        }
-        else if(plansza_nad[x][y] == FLAGA) {
-            plansza_nad[x][y] = POLE_NIEODKRYTE;
+        if(licznik_flag<liczba_min) {
+            if(plansza_nad[x][y] == POLE_NIEODKRYTE) {
+                plansza_nad[x][y] = FLAGA;
+                licznik_flag++;         
+            }
+            else if(plansza_nad[x][y] == FLAGA) {
+                plansza_nad[x][y] = POLE_NIEODKRYTE;
+                licznik_flag--;
+            }
+            else {
+                printf("\n W tym miejscu nie mozna wstawic flagi !!!\n");
+            }
         }
         else {
-            printf("\n W tym miejscu nie mozna wstawic flagi !!!\n");
+            printf("\nUmieszczono maksymalna ilosc flag - Prosze usunac inna flage, aby umiescic kolejna\n");
         }
- 
         break;
 
     default:
@@ -323,6 +329,36 @@ void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_p
         break;
     }
 
+}
+
+// funkcja sprawdzajaca czy zostaly osiagniete warunki zwycieztwa
+int czy_wygrana(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_nad, int stan_gry, int x, int y) {
+
+    int liczba_rozstawionych_flag = 0;
+    int liczba_odlsonietych_pol = 0;
+
+    if(plansza_nad[x][y] == MINA){
+        stan_gry = -1;
+        return stan_gry;
+    }
+
+    for(int i = 0; i<liczba_wierszy; i++) {
+        for(int j = 0; j<liczba_kolumn; j++) {
+            if(plansza_nad[i][j] == FLAGA) {
+                liczba_rozstawionych_flag++;
+            }
+            if(plansza_nad[i][j] == POLE_ODKRYTE || plansza_nad[i][j] == '1' || plansza_nad[i][j] == '2' || plansza_nad[i][j] == '3' || plansza_nad[i][j] == '4' || plansza_nad[i][j] == '5' || plansza_nad[i][j] == '6' || plansza_nad[i][j] == '7' || plansza_nad[i][j] == '8') {
+                liczba_odlsonietych_pol++;
+            }
+        }
+    }
+
+    if(liczba_rozstawionych_flag == liczba_min && liczba_odlsonietych_pol == (liczba_kolumn * liczba_wierszy - liczba_min)) {
+        stan_gry = 1;
+        return stan_gry;
+    }
+
+    return stan_gry;
 }
 
 int main()
@@ -334,6 +370,7 @@ int main()
     int stan_gry = 0;           // -1 - przegrana, 0 - trwa, 1 - wygrana
     int x, y;                   // Wspolrzedne pola wpisywane przez uzytkownika
     char dzialanie_na_polu;     // Wybor miedzy odslanieciem pola a wstawieniu flagi (r/f)
+    int licznik_flag = 0;       // Liczba flag
 
     printf("Saper");             //Placeholder tu cos ladniejszego dac
 
@@ -434,17 +471,29 @@ int main()
     // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
 
     while(stan_gry == 0) {
-        // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+        printf("\nS--------DIAGNOSTYCZNA PLANSZA POD--------------S\n");
+        wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
+        printf("\nK--------DIAGNOSTYCZNA PLANSZA POD--------------K\n");
 
         printf("\n Podaj tryb zaznaczania pola i wspolrzedne: ");
         scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
         printf("\n");
 
-        aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
+        aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1, licznik_flag, liczba_min);
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
-        if(plansza_pod[y-1][x-1] == MINA) {
+        /*
+        if(plansza_pod[y-1][x-1] == MINA && plansza_nad[y-1][x-1] != FLAGA) {
             stan_gry = -1;
         }
+        */
+        stan_gry = czy_wygrana(liczba_wierszy, liczba_kolumn, liczba_min, plansza_nad, stan_gry, y-1, x-1);
+    }
+
+    if(stan_gry == 1) {
+        printf("\n!!!!! WYGRANA !!!!!\n");
+    }
+    else {
+        printf("\nXXXXX PRZEGRANA XXXXX\n");
     }
 
 
