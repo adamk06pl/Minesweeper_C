@@ -209,6 +209,7 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 }
 
 void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod) {
+    printf("Przekazne x, y do funkcjo odkrycie: x=%d, y=%d", poczatkowy_x, poczatkowy_y);
     if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
         plansza_nad[poczatkowy_y][poczatkowy_x] = plansza_pod[poczatkowy_y][poczatkowy_x];
 
@@ -411,7 +412,7 @@ int main()
     printf("Uytkownik podał x=%d, y=%d\n", x, y);
     wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod, x-1, y-1);
     // DIAGNOSTYCZNE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
-    odkrycie(liczba_wierszy, liczba_kolumn, x, y, plansza_nad, plansza_pod);
+    odkrycie(liczba_wierszy, liczba_kolumn, x-1, y-1, plansza_nad, plansza_pod);
 
     wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
     printf("\n");
@@ -425,7 +426,6 @@ int main()
         printf("\n");
 
         aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
-
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
         stan_gry = 1;
     }
