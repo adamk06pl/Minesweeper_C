@@ -300,7 +300,16 @@ void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_p
         break;
     
     case 'f':
-        plansza_nad[x][y] = FLAGA;
+        if(plansza_nad[x][y] == POLE_NIEODKRYTE) {
+            plansza_nad[x][y] = FLAGA;         
+        }
+        else if(plansza_nad[x][y] == FLAGA) {
+            plansza_nad[x][y] = POLE_NIEODKRYTE;
+        }
+        else {
+            printf("\n W tym miejscu nie mozna wstawic flagi !!!\n");
+        }
+ 
         break;
 
     default:
@@ -431,7 +440,7 @@ int main()
             stan_gry = -1;
         }
     }
-    
+
 
 
     // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
