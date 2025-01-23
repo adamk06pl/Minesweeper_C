@@ -7,6 +7,7 @@
 #define POLE_ODKRYTE '.'
 #define FLAGA 'F'
 #define MINA '*'
+#define POLE_BEZ_MIN '0'
 
 // funkcja aktualizujaca na jego podstawie plansze
 void aktualizuj_plansze (char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y) {
@@ -149,17 +150,70 @@ char badaj_punkt(int liczba_wierszy, int liczba_kolumn, char **plansza, int x, i
     return wynik;
 }
 
+
+void oznacz_punkty_w_otoczeniu_punktu_poczatkowego(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza) {
+
+    if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
+ 
+        //srodek
+        plansza[poczatkowy_y][poczatkowy_x] = POLE_BEZ_MIN;
+
+        //lewy gorny
+        if(poczatkowy_x-1>=0 && poczatkowy_y-1>=0) {
+            plansza[poczatkowy_y-1][poczatkowy_x-1] = POLE_BEZ_MIN;
+        }
+        //lewy
+        if(poczatkowy_x-1>=0) {
+            plansza[poczatkowy_y][poczatkowy_x-1] = POLE_BEZ_MIN;
+        }
+        //lewy dolny
+        if(poczatkowy_x-1>=0 && poczatkowy_y+1<liczba_wierszy) {
+            plansza[poczatkowy_y+1][poczatkowy_x-1] = POLE_BEZ_MIN;
+        }
+        //dol
+        if(poczatkowy_y+1<liczba_wierszy) {
+            plansza[poczatkowy_y+1][poczatkowy_x] = POLE_BEZ_MIN;
+        }
+        //prawy dolny
+        if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y+1<liczba_wierszy) {
+            plansza[poczatkowy_y+1][poczatkowy_x+1] = POLE_BEZ_MIN;
+        }
+        //prawy
+        if(poczatkowy_x+1<liczba_kolumn) {
+            plansza[poczatkowy_y][poczatkowy_x+1] = POLE_BEZ_MIN;
+        }
+        //prawy gorny
+        if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y-1>=0) {
+            plansza[poczatkowy_y-1][poczatkowy_x+1] = POLE_BEZ_MIN;
+        }
+        //gora
+        if(poczatkowy_y-1>=0) {
+            plansza[poczatkowy_y-1][poczatkowy_x] = POLE_BEZ_MIN;
+        }
+    }
+}
+
+
+
+// TO DO: przerobic funkcje tak aby pierwszys strzal uzytkownika trafial w puste pole
 // funkcja wypelniajaca plansze_pod bombami
-void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod) {
+void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod, int poczatkowy_x, int poczatkowy_y) {
     int i = 0;
-    int x, y;
+    int wylosowany_x, wylosowany_y;
+
+    int wynik_badania;
+    oznacz_punkty_w_otoczeniu_punktu_poczatkowego(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y, plansza_pod);
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
     //wstawianie min
     while(i<liczba_min) {
-        x = rand() % (liczba_wierszy);
-        y =rand() % (liczba_kolumn);
-        if(plansza_pod[x][y] != MINA) {
-            plansza_pod[x][y] = MINA;
+        wylosowany_x = rand() % (liczba_wierszy);
+        wylosowany_y = rand() % (liczba_kolumn);
+        //wynik_badania = badaj_czy_punkt_w_otoczeniu_punktu_poczatkowego(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y, wylosowany_x, wylosowany_y);
+        printf("Badany punkt x = %d, y = %d, wynik badania = %d\n", wylosowany_x, wylosowany_y, wynik_badania);
+        if(plansza_pod[wylosowany_y][wylosowany_x] != MINA && plansza_pod[wylosowany_y][wylosowany_x] != POLE_BEZ_MIN/*(&& wynik_badania == 0) */){
+            plansza_pod[wylosowany_y][wylosowany_x] = MINA;
             i++;
+            printf("wstawiam mine w x = %d, y = %d\n", wylosowany_x, wylosowany_y);
         }
     }
 
@@ -271,7 +325,16 @@ int main()
     }
 
     wypelnienie_planszy(liczba_wierszy, liczba_kolumn, plansza_nad);
-    wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod);
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
+    printf("\n Rozpoczynamy grę, podaj tryb zaznaczania pola i wspolrzedne: ");
+    scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
+    printf("\n");
+
+    printf("Uytkownik podał x=%d, y=%d\n", x, y);
+    wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod, x-1, y-1);
+    aktualizuj_plansze(plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1);
+
+    wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
 
     while(stan_gry == 0) {
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
