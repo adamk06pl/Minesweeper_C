@@ -208,91 +208,82 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 
 }
 
-void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod, int punkty, int mnoznik) {
+void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod) {
     // DIAGNOSTYCZNE printf("Przekazne x, y do funkcjo odkrycie: x=%d, y=%d", poczatkowy_x, poczatkowy_y);
     if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
         plansza_nad[poczatkowy_y][poczatkowy_x] = plansza_pod[poczatkowy_y][poczatkowy_x];
-        punkty = punkty + 1 * mnoznik;
 
         if(plansza_pod[poczatkowy_y][poczatkowy_x] == '0') {
             //lewy gorny
             if(poczatkowy_x-1>=0 && poczatkowy_y-1>=0) {
                 if(plansza_pod[poczatkowy_y-1][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x-1] != MINA) {
                     plansza_nad[poczatkowy_y-1][poczatkowy_x-1] = plansza_pod[poczatkowy_y-1][poczatkowy_x-1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y-1][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x-1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y-1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y-1, plansza_nad, plansza_pod);
                 }
             }
             //lewy
             if(poczatkowy_x-1>=0) {
                 if(plansza_pod[poczatkowy_y][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y][poczatkowy_x-1] != MINA) {
                     plansza_nad[poczatkowy_y][poczatkowy_x-1] = plansza_pod[poczatkowy_y][poczatkowy_x-1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y][poczatkowy_x-1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y, plansza_nad, plansza_pod);
                 }
             }
             //lewy dolny
             if(poczatkowy_x-1>=0 && poczatkowy_y+1<liczba_wierszy) {
                 if(plansza_pod[poczatkowy_y+1][poczatkowy_x-1] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x-1] != MINA) {
                     plansza_nad[poczatkowy_y+1][poczatkowy_x-1] = plansza_pod[poczatkowy_y+1][poczatkowy_x-1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y+1][poczatkowy_x-1] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x-1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y+1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x-1, poczatkowy_y+1, plansza_nad, plansza_pod);
                 }
             }
             //dol
             if(poczatkowy_y+1<liczba_wierszy) {
                 if(plansza_pod[poczatkowy_y+1][poczatkowy_x] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x] != MINA) {
                     plansza_nad[poczatkowy_y+1][poczatkowy_x] = plansza_pod[poczatkowy_y+1][poczatkowy_x];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y+1][poczatkowy_x] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y+1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y+1, plansza_nad, plansza_pod);
                 }
             }
             //prawy dolny
             if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y+1<liczba_wierszy) {
                 if(plansza_pod[poczatkowy_y+1][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y+1][poczatkowy_x+1] != MINA) {
                     plansza_nad[poczatkowy_y+1][poczatkowy_x+1] = plansza_pod[poczatkowy_y+1][poczatkowy_x+1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y+1][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y+1][poczatkowy_x+1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y+1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y+1, plansza_nad, plansza_pod);
                 }
             }
             //prawy
             if(poczatkowy_x+1<liczba_kolumn) {
                 if(plansza_pod[poczatkowy_y][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y][poczatkowy_x+1] != MINA) {
                     plansza_nad[poczatkowy_y][poczatkowy_x+1] = plansza_pod[poczatkowy_y][poczatkowy_x+1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y][poczatkowy_x+1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y, plansza_nad, plansza_pod);
                 }
             }
             //prawy gorny
             if(poczatkowy_x+1<liczba_kolumn && poczatkowy_y-1>=0) {
                 if(plansza_pod[poczatkowy_y-1][poczatkowy_x+1] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x+1] != MINA) {
                     plansza_nad[poczatkowy_y-1][poczatkowy_x+1] = plansza_pod[poczatkowy_y-1][poczatkowy_x+1];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y-1][poczatkowy_x+1] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x+1] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y-1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x+1, poczatkowy_y-1, plansza_nad, plansza_pod);
                 }
             }
             //gora
             if(poczatkowy_y-1>=0) {
                 if(plansza_pod[poczatkowy_y-1][poczatkowy_x] != '0' && plansza_pod[poczatkowy_y-1][poczatkowy_x] != MINA) {
                     plansza_nad[poczatkowy_y-1][poczatkowy_x] = plansza_pod[poczatkowy_y-1][poczatkowy_x];
-                    punkty = punkty + 1 * mnoznik;
                 }
                 else if(plansza_pod[poczatkowy_y-1][poczatkowy_x] == '0' && plansza_nad[poczatkowy_y-1][poczatkowy_x] == POLE_NIEODKRYTE) {
-                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y-1, plansza_nad, plansza_pod, punkty, mnoznik);
+                    odkrycie(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y-1, plansza_nad, plansza_pod);
                 }
             }
         }
@@ -301,12 +292,12 @@ void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int pocza
 }
 
 // funkcja aktualizujaca na jego podstawie plansze
-void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y, int licznik_flag, int liczba_min, int punkty, int mnoznik) {
+void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y, int licznik_flag, int liczba_min) {
     switch (dzialanie_na_polu) {
     case 'r':
         //plansza_nad[x][y] = POLE_ODKRYTE;
         if(plansza_nad[x][y] != POLE_ODKRYTE && plansza_nad[x][y] != FLAGA && plansza_nad[x][y] !='1' && plansza_nad[x][y] != '2' && plansza_nad[x][y] != '3' && plansza_nad[x][y] != '4' && plansza_nad[x][y] != '5' && plansza_nad[x][y] != '6' && plansza_nad[x][y] != '7' && plansza_nad[x][y] != '8') {
-            odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod, punkty, mnoznik);
+            odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod);
         }
         else {
             printf("\n W tym miejscu nie mozna odslonic pola !!!\n");
@@ -370,17 +361,35 @@ int czy_wygrana(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **pl
     return stan_gry;
 }
 
+int oblicz_punkty(int liczba_wierszy, int liczba_kolumn, char **plansza_nad, int mnoznik_punktow) {
+
+    int punkty = 0;
+    int nieodkryte = 0;
+
+    for(int i = 0; i<liczba_wierszy; i++) {
+        for(int j = 0; j<liczba_kolumn; j++) {
+            if(plansza_nad[i][j] == POLE_NIEODKRYTE || plansza_nad[i][j] == FLAGA) {
+                nieodkryte++;
+            }
+        }
+    }
+
+    punkty = mnoznik_punktow * (liczba_kolumn * liczba_wierszy - nieodkryte);
+
+    return punkty;
+}
+
 int main()
 {
     srand(time(NULL));
 
     int trudnosc;               //Poziom trudnosci gry
-    int liczba_wierszy, liczba_kolumn, liczba_min, mnoznik;
+    int liczba_wierszy, liczba_kolumn, liczba_min, mnoznik_punktow;
     int stan_gry = 0;           // -1 - przegrana, 0 - trwa, 1 - wygrana
     int x, y;                   // Wspolrzedne pola wpisywane przez uzytkownika
     char dzialanie_na_polu;     // Wybor miedzy odslanieciem pola a wstawieniu flagi (r/f)
     int licznik_flag = 0;       // Liczba flag
-    int punkty = 0;             // Liczba punktow zdobytych
+    int punkty = 0;             // Liczba punktow
 
     printf("Saper");             //Placeholder tu cos ladniejszego dac
 
@@ -395,7 +404,7 @@ int main()
                     liczba_kolumn = 9;
                     liczba_wierszy = 9;
                     liczba_min = 10;
-                    mnoznik = 1;
+                    mnoznik_punktow = 1;
                     printf("Wybrano poziom trudnosci 1 - Latwy :)\n");
                     break;
 
@@ -403,7 +412,7 @@ int main()
                     liczba_kolumn = 16;
                     liczba_wierszy = 16;
                     liczba_min = 40;
-                    mnoznik = 2;
+                    mnoznik_punktow = 2;
                     printf("Wybrano poziom trudnosci 2 - Sredni :|\n");
                     break;
 
@@ -411,7 +420,7 @@ int main()
                     liczba_kolumn = 30;
                     liczba_wierszy = 16;
                     liczba_min = 99;
-                    mnoznik = 3;
+                    mnoznik_punktow = 3;
                     printf("Wybrano poziom trudnosci 3 - Trudny >:(\n");
                     break;
 
@@ -445,7 +454,7 @@ int main()
 
                     printf("Zostaly wybrane nastepujace parametry: Plansza %dx%d, liczba min %d\n", liczba_kolumn, liczba_wierszy, liczba_min);
 
-                    mnoznik = 0;
+                    mnoznik_punktow = 0;
                     break;
 
             default:
@@ -474,7 +483,7 @@ int main()
     printf("Uytkownik podał x=%d, y=%d\n", x, y);
     wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod, x-1, y-1);
     // DIAGNOSTYCZNE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
-    odkrycie(liczba_wierszy, liczba_kolumn, x-1, y-1, plansza_nad, plansza_pod, punkty, mnoznik);
+    odkrycie(liczba_wierszy, liczba_kolumn, x-1, y-1, plansza_nad, plansza_pod);
 
     wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
     printf("\n");
@@ -489,9 +498,11 @@ int main()
         scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
         printf("\n");
 
-        aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1, licznik_flag, liczba_min, punkty, mnoznik);
+        aktualizuj_plansze(liczba_wierszy, liczba_kolumn, plansza_pod, plansza_nad, dzialanie_na_polu, y-1, x-1, licznik_flag, liczba_min);
         wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
-        printf("LICZBA PUNKTOW: %d\n", punkty);
+
+        punkty = oblicz_punkty(liczba_wierszy, liczba_kolumn, plansza_nad, mnoznik_punktow);
+        printf("\nLICZBA PUNKTOW: %d", punkty);
         /*
         if(plansza_pod[y-1][x-1] == MINA && plansza_nad[y-1][x-1] != FLAGA) {
             stan_gry = -1;
@@ -502,11 +513,9 @@ int main()
 
     if(stan_gry == 1) {
         printf("\n!!!!! WYGRANA !!!!!\n");
-        printf("ZDOBYTO %d PUNKTOW\n", punkty);
     }
     else {
         printf("\nXXXXX PRZEGRANA XXXXX\n");
-        printf("ZDOBYTO %d PUNKTOW\n", punkty);
     }
 
 
