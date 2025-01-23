@@ -194,8 +194,6 @@ void oznacz_punkty_w_otoczeniu_punktu_poczatkowego(int liczba_wierszy, int liczb
 }
 
 
-
-// TO DO: przerobic funkcje tak aby pierwszys strzal uzytkownika trafial w puste pole
 // funkcja wypelniajaca plansze_pod bombami
 void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **plansza_pod, int poczatkowy_x, int poczatkowy_y) {
     int i = 0;
@@ -208,12 +206,10 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
     while(i<liczba_min) {
         wylosowany_x = rand() % (liczba_wierszy);
         wylosowany_y = rand() % (liczba_kolumn);
-        //wynik_badania = badaj_czy_punkt_w_otoczeniu_punktu_poczatkowego(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y, wylosowany_x, wylosowany_y);
-        printf("Badany punkt x = %d, y = %d, wynik badania = %d\n", wylosowany_x, wylosowany_y, wynik_badania);
-        if(plansza_pod[wylosowany_y][wylosowany_x] != MINA && plansza_pod[wylosowany_y][wylosowany_x] != POLE_BEZ_MIN/*(&& wynik_badania == 0) */){
+
+        if(plansza_pod[wylosowany_y][wylosowany_x] != MINA && plansza_pod[wylosowany_y][wylosowany_x] != POLE_BEZ_MIN) {
             plansza_pod[wylosowany_y][wylosowany_x] = MINA;
             i++;
-            printf("wstawiam mine w x = %d, y = %d\n", wylosowany_x, wylosowany_y);
         }
     }
 
