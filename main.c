@@ -83,14 +83,19 @@ void wypelnienie_planszy(int liczba_wierszy, int liczba_kolumn, char **plansza) 
 void wypisz_plansze(int liczba_wierszy, int liczba_kolumn, char **plansza) {
     printf("\n   ");
     for(int i = 1; i<=liczba_kolumn; i++) {
-        printf("[%d]", i);
+        printf("%3d", i);
     }
     printf("\n");
 
     for(int i = 0; i<liczba_wierszy; i++) {
-        printf("[%d]", i+1);
+        printf("%3d", i+1);
         for(int j = 0; j<liczba_kolumn; j++) {
-            printf("[%c]", plansza[i][j]);
+            if(plansza[i][j] == '0'){
+                printf("   ");
+            }
+            else{
+                printf("%3c", plansza[i][j]);
+            }
         }
         printf("\n");
     }
