@@ -2,12 +2,73 @@
 #include<stdlib.h>
 #include<math.h>
 #include<time.h>
+#include<string.h>
 
 #define POLE_NIEODKRYTE '#'
 #define POLE_ODKRYTE '0'
 #define FLAGA 'F'
 #define MINA '*'
 #define POLE_BEZ_MIN '0'
+#define MAX_GRACZY 1000  // Maksymalna liczba graczy do wczytania z pliku
+#define MAX_NAZWA 50
+#define WYNIKI_DO_WYPISANIA 5
+
+// Funkcja porównująca wyniki (do sortowania malejącego)
+typedef struct {
+    char nazwa_gracza[MAX_NAZWA];
+    int liczba_punktow;
+} Gracz;
+
+int porownaj_graczy(const void *a, const void *b) {
+    Gracz *graczA = (Gracz *)a;
+    Gracz *graczB = (Gracz *)b;
+    return graczB->liczba_punktow - graczA->liczba_punktow;
+}
+
+// Funkcja zapisująca wynik do pliku
+void zapisz_wynik(const char *nazwa_gracza, int liczba_punktow) {
+    // Otwieramy plik w trybie dopisywania
+    FILE *plik = fopen("wyniki.txt", "a");
+    if (plik == NULL) {
+        printf("Błąd: Nie można otworzyć pliku do zapisu!\n");
+        return;
+    }
+
+    // Dodajemy nowy wynik
+    fprintf(plik, "%s %d\n", nazwa_gracza, liczba_punktow);
+
+    fclose(plik);
+}
+
+// Funkcja wczytująca wyniki z pliku i wypisująca najlepsze 5
+void wypisz_najlepsze_wyniki() {
+    Gracz gracze[MAX_GRACZY];
+    int liczba_graczy = 0;
+
+    // Otwieramy plik w trybie odczytu
+    FILE *plik = fopen("wyniki.txt", "r");
+    if (plik == NULL) {
+        printf("Brak pliku 'wyniki.txt'.\n");
+        return;
+    }
+
+    // Wczytujemy wyniki z pliku
+    while (fscanf(plik, "%s %d", gracze[liczba_graczy].nazwa_gracza, 
+                  &gracze[liczba_graczy].liczba_punktow) == 2) {
+        liczba_graczy++;
+        if (liczba_graczy >= MAX_GRACZY) break; // Zabezpieczenie przed przepełnieniem
+    }
+    fclose(plik);
+
+    // Sortujemy wyniki malejąco według liczby punktów
+    qsort(gracze, liczba_graczy, sizeof(Gracz), porownaj_graczy);
+
+    // Wypisujemy najlepsze 5 wyników
+    printf("Najlepsze wyniki:\n");
+    for (int i = 0; i < liczba_graczy && i < WYNIKI_DO_WYPISANIA; i++) {
+        printf("%s %d\n", gracze[i].nazwa_gracza, gracze[i].liczba_punktow);
+    }
+}
 
 // funkcja wypelniajaca plansze znakami niezaznaczenia
 void wypelnienie_planszy(int liczba_wierszy, int liczba_kolumn, char **plansza) {
@@ -390,6 +451,8 @@ int main()
     char dzialanie_na_polu;     // Wybor miedzy odslanieciem pola a wstawieniu flagi (r/f)
     int licznik_flag = 0;       // Liczba flag
     int punkty = 0;             // Liczba punktow
+    char nazwa_gracza[MAX_NAZWA];
+    
 
     printf("Saper");             //Placeholder tu cos ladniejszego dac
 
@@ -511,15 +574,21 @@ int main()
         stan_gry = czy_wygrana(liczba_wierszy, liczba_kolumn, liczba_min, plansza_nad, stan_gry, y-1, x-1);
     }
 
+    printf("\n");
     if(stan_gry == 1) {
         printf("\n!!!!! WYGRANA !!!!!\n");
+        printf("\nZDOBYTA LICZBA PUNKTOW: %d\n", punkty);
     }
     else {
         printf("\nXXXXX PRZEGRANA XXXXX\n");
+        printf("\nZDOBYTA LICZBA PUNKTOW: %d\n", punkty);
     }
 
+    printf("\nPodaj nazwe gracza: ");
+    scanf("%s", nazwa_gracza);
 
+    zapisz_wynik(nazwa_gracza, punkty);
+    wypisz_najlepsze_wyniki();
 
-    // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
-
+    return 0;
 }
