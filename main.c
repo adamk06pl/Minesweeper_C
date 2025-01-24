@@ -13,12 +13,12 @@
 #define MAX_NAZWA 50
 #define WYNIKI_DO_WYPISANIA 5
 
-// Funkcja porównująca wyniki (do sortowania malejącego)
 typedef struct {
     char nazwa_gracza[MAX_NAZWA];
     int liczba_punktow;
 } Gracz;
 
+// Funkcja porównująca wyniki (do sortowania malejącego)
 int porownaj_graczy(const void *a, const void *b) {
     Gracz *graczA = (Gracz *)a;
     Gracz *graczB = (Gracz *)b;
@@ -131,7 +131,7 @@ char konwertuj_char_to_int(int licznik) {
     return wynik;
 }
 
-// funkcja badajaca
+// funkcja badajaca ile jest min wokol punktu
 char badaj_punkt(int liczba_wierszy, int liczba_kolumn, char **plansza, int x, int y) {
     int licznik = 0;
     char wynik = '?';
@@ -243,7 +243,6 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 
     int wynik_badania;
     oznacz_punkty_w_otoczeniu_punktu_poczatkowego(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y, plansza_pod);
-    // DIAGNOSTYCZNE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
     //wstawianie min
     while(i<liczba_min) {
         wylosowany_x = rand() % (liczba_wierszy);
@@ -270,7 +269,6 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
 }
 
 void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int poczatkowy_y, char **plansza_nad, char **plansza_pod) {
-    // DIAGNOSTYCZNE printf("Przekazne x, y do funkcjo odkrycie: x=%d, y=%d", poczatkowy_x, poczatkowy_y);
     if(poczatkowy_x>=0 && poczatkowy_x<liczba_kolumn && poczatkowy_y>=0 && poczatkowy_y<liczba_wierszy) {
         plansza_nad[poczatkowy_y][poczatkowy_x] = plansza_pod[poczatkowy_y][poczatkowy_x];
 
@@ -352,11 +350,10 @@ void odkrycie(int liczba_wierszy, int liczba_kolumn, int poczatkowy_x, int pocza
     }
 }
 
-// funkcja aktualizujaca na jego podstawie plansze
+// funkcja aktualizujaca plansze
 void aktualizuj_plansze (int liczba_wierszy, int liczba_kolumn, char **plansza_pod, char **plansza_nad, char dzialanie_na_polu, int x, int y, int licznik_flag, int liczba_min) {
     switch (dzialanie_na_polu) {
     case 'r':
-        //plansza_nad[x][y] = POLE_ODKRYTE;
         if(plansza_nad[x][y] != POLE_ODKRYTE && plansza_nad[x][y] != FLAGA && plansza_nad[x][y] !='1' && plansza_nad[x][y] != '2' && plansza_nad[x][y] != '3' && plansza_nad[x][y] != '4' && plansza_nad[x][y] != '5' && plansza_nad[x][y] != '6' && plansza_nad[x][y] != '7' && plansza_nad[x][y] != '8') {
             odkrycie(liczba_wierszy, liczba_kolumn, y, x, plansza_nad, plansza_pod);
         }
@@ -422,6 +419,7 @@ int czy_wygrana(int liczba_wierszy, int liczba_kolumn, int liczba_min, char **pl
     return stan_gry;
 }
 
+// funckja obliczajaca aktualna liczbe punktow
 int oblicz_punkty(int liczba_wierszy, int liczba_kolumn, char **plansza_nad, int mnoznik_punktow) {
 
     int punkty = 0;
@@ -454,7 +452,7 @@ int main()
     char nazwa_gracza[MAX_NAZWA];
     
 
-    printf("Saper");             //Placeholder tu cos ladniejszego dac
+    printf("Saper\n JIMP1");
 
     printf("Wybierz poziom trudnosci:\n");
     printf("Latwy :) - 1\t Sredni :| - 2\t Trudny >:( - 3\t Wlasny - 4\n");
@@ -543,20 +541,13 @@ int main()
     scanf("%d %d", &x, &y);
     printf("\n");
 
-    printf("Uytkownik podał x=%d, y=%d\n", x, y);
     wypelnianie_bombami(liczba_wierszy, liczba_kolumn, liczba_min, plansza_pod, x-1, y-1);
-    // DIAGNOSTYCZNE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
     odkrycie(liczba_wierszy, liczba_kolumn, x-1, y-1, plansza_nad, plansza_pod);
 
     wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_nad);
     printf("\n");
-    // DIAGNOSTYCZNIE wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
 
     while(stan_gry == 0) {
-        printf("\nS--------DIAGNOSTYCZNA PLANSZA POD--------------S\n");
-        wypisz_plansze(liczba_wierszy, liczba_kolumn, plansza_pod);
-        printf("\nK--------DIAGNOSTYCZNA PLANSZA POD--------------K\n");
-
         printf("\n Podaj tryb zaznaczania pola i wspolrzedne: ");
         scanf(" %c %d %d", &dzialanie_na_polu, &x, &y);
         printf("\n");
@@ -566,11 +557,7 @@ int main()
 
         punkty = oblicz_punkty(liczba_wierszy, liczba_kolumn, plansza_nad, mnoznik_punktow);
         printf("\nLICZBA PUNKTOW: %d", punkty);
-        /*
-        if(plansza_pod[y-1][x-1] == MINA && plansza_nad[y-1][x-1] != FLAGA) {
-            stan_gry = -1;
-        }
-        */
+    
         stan_gry = czy_wygrana(liczba_wierszy, liczba_kolumn, liczba_min, plansza_nad, stan_gry, y-1, x-1);
     }
 
