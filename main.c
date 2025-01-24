@@ -246,7 +246,6 @@ void wypelnianie_bombami(int liczba_wierszy, int liczba_kolumn, int liczba_min, 
     int i = 0;
     int wylosowany_x, wylosowany_y;
 
-    int wynik_badania;
     oznacz_punkty_w_otoczeniu_punktu_poczatkowego(liczba_wierszy, liczba_kolumn, poczatkowy_x, poczatkowy_y, plansza_pod);
     //wstawianie min
     while(i<liczba_min) {
